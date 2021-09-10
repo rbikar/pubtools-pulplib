@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Client &#8212; pubtools-pulplib  documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Searching" href="searching.html" />
@@ -32,16 +33,16 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="client">
+  <section id="client">
 <h1>Client<a class="headerlink" href="#client" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="pubtools.pulplib.Client">
-<em class="property">class </em><code class="sig-prename descclassname">pubtools.pulplib.</code><code class="sig-name descname">Client</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pubtools.pulplib.Client" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="pubtools.pulplib.Client">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pubtools.pulplib.</span></span><span class="sig-name descname"><span class="pre">Client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.Client" title="Permalink to this definition">¶</a></dt>
 <dd><p>A client for the Pulp 2.x API.</p>
 <p>This class provides high-level methods for querying a Pulp server and performing
 actions in Pulp.</p>
 <p><strong>Usage of futures:</strong></p>
-<p>Most values are returned as <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Future" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Future</span></code></a> objects.
+<p>Most values are returned as <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Future" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Future</span></code></a> objects.
 Returned futures are resolved when:</p>
 <ul class="simple">
 <li><p>a request to Pulp succeeded, if operation is synchronous (e.g. get, search)</p></li>
@@ -50,11 +51,23 @@ is asynchronous (e.g. publish)</p></li>
 </ul>
 <p>If a future is currently awaiting one or more Pulp tasks, cancelling the future
 will attempt to cancel those tasks.</p>
+<p><strong>Client lifecycle:</strong></p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.12.0.</span></p>
+</div>
+<p>Client instances support the context manager protocol and can be used
+via a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement, as in example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Client</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://pulp.example.com/&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">do_something_with</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>While not mandatory, it is encouraged to ensure that any threads associated with
+the client are promptly shut down.</p>
 <p><strong>Proxy futures:</strong></p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.1.0.</span></p>
 </div>
-<p>All <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Future" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Future</span></code></a> objects produced by this client are
+<p>All <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Future" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Future</span></code></a> objects produced by this client are
 <em>proxy futures</em>, meaning that attribute and method lookups on the objects are
 proxied to the future’s result, blocking as needed.</p>
 <p>This allows the client to be used within blocking code without having to
@@ -85,22 +98,55 @@ task queue.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – URL of a Pulp server, e.g. <a class="reference external" href="https://pulp.example.com/">https://pulp.example.com/</a>.</p></li>
-<li><p><strong>auth</strong><strong>, </strong><strong>cert</strong><strong>, </strong><strong>headers</strong><strong>, </strong><strong>max_redirects</strong><strong>, </strong><strong>params</strong><strong>, </strong><strong>proxies</strong><strong>, </strong><strong>verify</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><em>object</em></a>) – <p>Any of these arguments, if provided, are used to initialize
-<code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Session</span></code> objects used by the client.</p>
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – URL of a Pulp server, e.g. <a class="reference external" href="https://pulp.example.com/">https://pulp.example.com/</a>.</p></li>
+<li><p><strong>task_throttle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Maximum number of queued or running tasks permitted for this client.
+If more than this number of tasks are running, the client will wait before triggering more.
+This can be used to ensure no single client overwhelms the Pulp server.</p></li>
+<li><p><strong>auth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><em>object</em></a>) – <p>Any of these arguments, if provided, are used to initialize
+<a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Session" title="(in Requests v2.26.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Session</span></code></a> objects used by the client.</p>
+<p>These may be used, for example, to configure the credentials
+for the Pulp server or to use an alternative CA bundle.</p>
+</p></li>
+<li><p><strong>cert</strong> – <p>Any of these arguments, if provided, are used to initialize
+<a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Session" title="(in Requests v2.26.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Session</span></code></a> objects used by the client.</p>
+<p>These may be used, for example, to configure the credentials
+for the Pulp server or to use an alternative CA bundle.</p>
+</p></li>
+<li><p><strong>headers</strong> – <p>Any of these arguments, if provided, are used to initialize
+<a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Session" title="(in Requests v2.26.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Session</span></code></a> objects used by the client.</p>
+<p>These may be used, for example, to configure the credentials
+for the Pulp server or to use an alternative CA bundle.</p>
+</p></li>
+<li><p><strong>max_redirects</strong> – <p>Any of these arguments, if provided, are used to initialize
+<a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Session" title="(in Requests v2.26.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Session</span></code></a> objects used by the client.</p>
+<p>These may be used, for example, to configure the credentials
+for the Pulp server or to use an alternative CA bundle.</p>
+</p></li>
+<li><p><strong>params</strong> – <p>Any of these arguments, if provided, are used to initialize
+<a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Session" title="(in Requests v2.26.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Session</span></code></a> objects used by the client.</p>
+<p>These may be used, for example, to configure the credentials
+for the Pulp server or to use an alternative CA bundle.</p>
+</p></li>
+<li><p><strong>proxies</strong> – <p>Any of these arguments, if provided, are used to initialize
+<a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Session" title="(in Requests v2.26.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Session</span></code></a> objects used by the client.</p>
+<p>These may be used, for example, to configure the credentials
+for the Pulp server or to use an alternative CA bundle.</p>
+</p></li>
+<li><p><strong>verify</strong> – <p>Any of these arguments, if provided, are used to initialize
+<a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Session" title="(in Requests v2.26.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Session</span></code></a> objects used by the client.</p>
 <p>These may be used, for example, to configure the credentials
 for the Pulp server or to use an alternative CA bundle.</p>
 </p></li>
 </ul>
 </dd>
 </dl>
-<dl class="method">
-<dt id="pubtools.pulplib.Client.get_repository">
-<code class="sig-name descname">get_repository</code><span class="sig-paren">(</span><em class="sig-param">repository_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.get_repository"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pubtools.pulplib.Client.get_repository" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pubtools.pulplib.Client.get_repository">
+<span class="sig-name descname"><span class="pre">get_repository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.get_repository"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.Client.get_repository" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a repository by ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>repository_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The ID of the repository to be fetched.</p>
+<dd class="field-odd"><p><strong>repository_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The ID of the repository to be fetched.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><dl class="simple">
@@ -112,9 +158,9 @@ for the Pulp server or to use an alternative CA bundle.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pubtools.pulplib.Client.search_repository">
-<code class="sig-name descname">search_repository</code><span class="sig-paren">(</span><em class="sig-param">criteria=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.search_repository"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pubtools.pulplib.Client.search_repository" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pubtools.pulplib.Client.search_repository">
+<span class="sig-name descname"><span class="pre">search_repository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.search_repository"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.Client.search_repository" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search for repositories matching the given criteria.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -133,9 +179,33 @@ If None, search for all repositories.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pubtools.pulplib.Client.search_distributor">
-<code class="sig-name descname">search_distributor</code><span class="sig-paren">(</span><em class="sig-param">criteria=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.search_distributor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pubtools.pulplib.Client.search_distributor" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pubtools.pulplib.Client.search_content">
+<span class="sig-name descname"><span class="pre">search_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.search_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.Client.search_content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for units across all repositories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>criteria</strong> (<a class="reference internal" href="searching.html#pubtools.pulplib.Criteria" title="pubtools.pulplib.Criteria"><code class="xref py py-class docutils literal notranslate"><span class="pre">Criteria</span></code></a>) – A criteria object used for this search.
+If None, search for all units.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl>
+<dt>Future[<a class="reference internal" href="searching.html#pubtools.pulplib.Page" title="pubtools.pulplib.Page"><code class="xref py py-class docutils literal notranslate"><span class="pre">Page</span></code></a>]</dt><dd><p>A future representing the first page of results.</p>
+<p>Each page will contain a collection of
+<a class="reference internal" href="model.html#pubtools.pulplib.Unit" title="pubtools.pulplib.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a> subclasses objects.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pubtools.pulplib.Client.search_distributor">
+<span class="sig-name descname"><span class="pre">search_distributor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.search_distributor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.Client.search_distributor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search the distributors matching the given criteria.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -157,9 +227,9 @@ If None, search for all distributors.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
-<dt id="pubtools.pulplib.Client.get_maintenance_report">
-<code class="sig-name descname">get_maintenance_report</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.get_maintenance_report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pubtools.pulplib.Client.get_maintenance_report" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pubtools.pulplib.Client.get_maintenance_report">
+<span class="sig-name descname"><span class="pre">get_maintenance_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.get_maintenance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.Client.get_maintenance_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the current maintenance mode status for this Pulp server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -175,9 +245,9 @@ If None, search for all distributors.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
-<dt id="pubtools.pulplib.Client.set_maintenance">
-<code class="sig-name descname">set_maintenance</code><span class="sig-paren">(</span><em class="sig-param">report</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.set_maintenance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pubtools.pulplib.Client.set_maintenance" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pubtools.pulplib.Client.set_maintenance">
+<span class="sig-name descname"><span class="pre">set_maintenance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.set_maintenance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.Client.set_maintenance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set maintenance mode for this Pulp server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -199,9 +269,9 @@ maintenance repository operation.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
-<dt id="pubtools.pulplib.Client.get_content_type_ids">
-<code class="sig-name descname">get_content_type_ids</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.get_content_type_ids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pubtools.pulplib.Client.get_content_type_ids" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pubtools.pulplib.Client.get_content_type_ids">
+<span class="sig-name descname"><span class="pre">get_content_type_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.get_content_type_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.Client.get_content_type_ids" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the content types supported by this Pulp server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -223,30 +293,30 @@ of common return values.</p>
 
 </dd></dl>
 
-<div class="section" id="errors">
+<section id="errors">
 <h2>Errors<a class="headerlink" href="#errors" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pubtools.pulplib.PulpException">
-<em class="property">class </em><code class="sig-prename descclassname">pubtools.pulplib.</code><code class="sig-name descname">PulpException</code><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/errors.html#PulpException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pubtools.pulplib.PulpException" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="pubtools.pulplib.PulpException">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pubtools.pulplib.</span></span><span class="sig-name descname"><span class="pre">PulpException</span></span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/errors.html#PulpException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.PulpException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Raised when the Pulp server has responded with an unrecoverable error
 (generally a failed HTTP response which persisted over several retries).</p>
 </dd></dl>
 
-<dl class="class">
-<dt id="pubtools.pulplib.TaskFailedException">
-<em class="property">class </em><code class="sig-prename descclassname">pubtools.pulplib.</code><code class="sig-name descname">TaskFailedException</code><span class="sig-paren">(</span><em class="sig-param">task</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/errors.html#TaskFailedException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pubtools.pulplib.TaskFailedException" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="pubtools.pulplib.TaskFailedException">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pubtools.pulplib.</span></span><span class="sig-name descname"><span class="pre">TaskFailedException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/errors.html#TaskFailedException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.TaskFailedException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Raised when a Pulp task has completed with errors.</p>
-<dl class="attribute">
-<dt id="pubtools.pulplib.TaskFailedException.task">
-<code class="sig-name descname">task</code><em class="property"> = None</em><a class="headerlink" href="#pubtools.pulplib.TaskFailedException.task" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pubtools.pulplib.TaskFailedException.task">
+<span class="sig-name descname"><span class="pre">task</span></span><a class="headerlink" href="#pubtools.pulplib.TaskFailedException.task" title="Permalink to this definition">¶</a></dt>
 <dd><p>The <a class="reference internal" href="model.html#pubtools.pulplib.Task" title="pubtools.pulplib.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a> which has failed.
 Error details may be accessed from the task.</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -269,7 +339,7 @@ Error details may be accessed from the task.</p>
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../api-reference.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Client</a></li>
@@ -309,12 +379,12 @@ Error details may be accessed from the task.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -331,7 +401,7 @@ Error details may be accessed from the task.</p>
       &copy;2019, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
