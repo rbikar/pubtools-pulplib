@@ -238,8 +238,12 @@ properties:
   # Task result. The content depends on the task type.
   result:
     anyOf:
-    - type: &quot;null&quot;
-    - type: array
+
+    # If it&#39;s not an object, we don&#39;t care what it is, just accept it.
+    - not:
+        type: object
+
+    # If it is an object, we will validate some inner fields.
     - type: object
       properties:
         # For tasks operating on units (e.g. assoc/unassoc), this element
@@ -293,7 +297,10 @@ definitions:
 
       # Size in bytes
       size:
-        type: integer
+        # Ideally would be &#39;integer&#39;, but some old units have been stored
+        # as non-integers, e.g.
+        # RHEL4-U5-ia64-source-disc2.iso =&gt; 512251904.0
+        type: number
 
       repository_memberships:
         type: array
@@ -618,7 +625,7 @@ properties:
       &copy;2019, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

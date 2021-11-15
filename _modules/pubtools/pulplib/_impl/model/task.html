@@ -31,10 +31,11 @@
           <div class="body" role="main">
             
   <h1>Source code for pubtools.pulplib._impl.model.task</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pubtools.pulplib._impl</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
+<span></span><span class="kn">from</span> <span class="nn">frozenlist2</span> <span class="kn">import</span> <span class="n">frozenlist</span>
+
+<span class="kn">from</span> <span class="nn">pubtools.pulplib._impl</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
 
 <span class="kn">from</span> <span class="nn">..schema</span> <span class="kn">import</span> <span class="n">load_schema</span>
-<span class="kn">from</span> <span class="nn">.frozenlist</span> <span class="kn">import</span> <span class="n">FrozenList</span>
 <span class="kn">from</span> <span class="nn">.unit</span> <span class="kn">import</span> <span class="n">Unit</span>
 <span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">PulpObject</span>
 <span class="kn">from</span> <span class="nn">.attr</span> <span class="kn">import</span> <span class="n">pulp_attrib</span>
@@ -79,9 +80,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">tags</span> <span class="o">=</span> <span class="n">pulp_attrib</span><span class="p">(</span>
-        <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">FrozenList</span><span class="p">),</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span>
-        <span class="n">converter</span><span class="o">=</span><span class="n">FrozenList</span><span class="p">,</span>
+        <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span><span class="p">,</span>
         <span class="n">pulp_field</span><span class="o">=</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;The tags for this task.</span>
@@ -95,15 +96,18 @@
 <span class="sd">         &quot;pulp:action:publish&quot;]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># TODO: is it a bug that this only allows a single repo ID??</span>
+    <span class="c1"># Some tasks, like copy, involve multiple repos. We&#39;ll only include</span>
+    <span class="c1"># the first repo ID from tags here... seems arbitrary.</span>
     <span class="n">repo_id</span> <span class="o">=</span> <span class="n">pulp_attrib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;The ID of the repository associated with this task, otherwise None.&quot;&quot;&quot;</span>
 
     <span class="n">units</span> <span class="o">=</span> <span class="n">pulp_attrib</span><span class="p">(</span>
-        <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">FrozenList</span><span class="p">),</span>
-        <span class="nb">type</span><span class="o">=</span><span class="n">FrozenList</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span>
         <span class="n">pulp_field</span><span class="o">=</span><span class="s2">&quot;result.units_successful&quot;</span><span class="p">,</span>
-        <span class="n">converter</span><span class="o">=</span><span class="n">FrozenList</span><span class="p">,</span>
-        <span class="n">pulp_py_converter</span><span class="o">=</span><span class="k">lambda</span> <span class="n">raw</span><span class="p">:</span> <span class="n">FrozenList</span><span class="p">(</span>
+        <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span><span class="p">,</span>
+        <span class="n">pulp_py_converter</span><span class="o">=</span><span class="k">lambda</span> <span class="n">raw</span><span class="p">:</span> <span class="n">frozenlist</span><span class="p">(</span>
             <span class="p">[</span><span class="n">Unit</span><span class="o">.</span><span class="n">_from_task_data</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">]</span>
         <span class="p">),</span>
     <span class="p">)</span>
@@ -118,9 +122,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">units_data</span> <span class="o">=</span> <span class="n">pulp_attrib</span><span class="p">(</span>
-        <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">FrozenList</span><span class="p">),</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span>
-        <span class="n">converter</span><span class="o">=</span><span class="n">FrozenList</span><span class="p">,</span>
+        <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span><span class="p">,</span>
         <span class="n">pulp_field</span><span class="o">=</span><span class="s2">&quot;result.units_successful&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;Info on the units which were processed as part of this task</span>
@@ -304,7 +308,7 @@
       &copy;2019, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
