@@ -105,13 +105,17 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            repository (:class:`~pubtools.pulplib.Repository`)</span>
-<span class="sd">                A repository object.</span>
+<span class="sd">                A repository object, or ``None`` to insert units as orphans.</span>
 <span class="sd">            units (list[:class:`~pubtools.pulplib.Unit`])</span>
 <span class="sd">                A list of units to be inserted.</span>
 
 <span class="sd">        .. versionadded:: 1.5.0</span>
+
+<span class="sd">        .. versionadded:: 2.21.0</span>
+<span class="sd">            Added ability to insert orphan units.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">_insert_repo_units</span><span class="p">(</span><span class="n">repository</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span></div>
+        <span class="n">repo_id</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">id</span> <span class="k">if</span> <span class="n">repository</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">_insert_repo_units</span><span class="p">(</span><span class="n">repo_id</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">content_type_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -229,7 +233,14 @@
 <h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/client.html">API: client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/pulpcore.html">API: core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/yum.html">API: yum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/files.html">API: files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/containers.html">API: containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/maintenance.html">API: maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/searching.html">API: searching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/testing.html">API: testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../schema.html">Schemas</a></li>
 </ul>
@@ -242,7 +253,7 @@
     
     <li class="toctree-l1"><a href="https://pypi.org/project/pubtools-pulplib">PyPI</a></li>
     
-    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    <li class="toctree-l1"><a href="https://release-engineering.github.io/pubtools-pulplib/genindex.html">Index</a></li>
     
 </ul>
 <div class="relations">
@@ -280,7 +291,7 @@
       &copy;2019, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
