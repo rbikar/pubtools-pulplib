@@ -230,7 +230,11 @@
 
     <span class="n">is_sigstore</span> <span class="o">=</span> <span class="n">pulp_attrib</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;True if this is a sigstore repository, used for container image manifest</span>
-<span class="sd">    signatures.&quot;&quot;&quot;</span>
+<span class="sd">    signatures.</span>
+
+<span class="sd">    .. deprecated:: 2.24.0</span>
+<span class="sd">       The signatures are not stored in a Pulp repository any more.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">is_temporary</span> <span class="o">=</span> <span class="n">pulp_attrib</span><span class="p">(</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -649,7 +653,7 @@
         <span class="n">unit_metadata_fn</span> <span class="o">=</span> <span class="n">unit_metadata_fn</span> <span class="ow">or</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="n">upload_id_f</span> <span class="o">=</span> <span class="n">f_map</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_request_upload</span><span class="p">(),</span> <span class="k">lambda</span> <span class="n">upload</span><span class="p">:</span> <span class="n">upload</span><span class="p">[</span><span class="s2">&quot;upload_id&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_request_upload</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">upload</span><span class="p">:</span> <span class="n">upload</span><span class="p">[</span><span class="s2">&quot;upload_id&quot;</span><span class="p">]</span>
         <span class="p">)</span>
 
         <span class="n">f_map</span><span class="p">(</span>
@@ -669,7 +673,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">upload_complete_f</span> <span class="o">=</span> <span class="n">f_flat_map</span><span class="p">(</span>
                 <span class="n">upload_id_f</span><span class="p">,</span>
-                <span class="k">lambda</span> <span class="n">upload_id</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_do_upload_file</span><span class="p">(</span><span class="n">upload_id</span><span class="p">,</span> <span class="n">file_obj</span><span class="p">),</span>
+                <span class="k">lambda</span> <span class="n">upload_id</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_do_upload_file</span><span class="p">(</span>
+                    <span class="n">upload_id</span><span class="p">,</span> <span class="n">file_obj</span><span class="p">,</span> <span class="n">name</span>
+                <span class="p">),</span>
             <span class="p">)</span>
 
         <span class="n">import_complete_f</span> <span class="o">=</span> <span class="n">f_flat_map</span><span class="p">(</span>
@@ -685,7 +691,7 @@
 
         <span class="n">f_map</span><span class="p">(</span>
             <span class="n">import_complete_f</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_delete_upload_request</span><span class="p">(</span><span class="n">upload_id_f</span><span class="o">.</span><span class="n">result</span><span class="p">()),</span>
+            <span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_delete_upload_request</span><span class="p">(</span><span class="n">upload_id_f</span><span class="o">.</span><span class="n">result</span><span class="p">(),</span> <span class="n">name</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">f_proxy</span><span class="p">(</span><span class="n">import_complete_f</span><span class="p">)</span></div>
