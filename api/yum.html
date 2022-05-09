@@ -645,9 +645,10 @@ another name of dependency.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pubtools.pulplib.RpmDependency.flags">
 <span class="sig-name descname"><span class="pre">flags</span></span><a class="headerlink" href="#pubtools.pulplib.RpmDependency.flags" title="Permalink to this definition">¶</a></dt>
-<dd><p>Flags representing relation to version of this RPM dependency.
-Can be one of GT (greater than), EQ (equal), LT (less than), GE (greater than or equal) and
-LE (less than or equal).</p>
+<dd><p>Flags representing relation to version of this RPM dependency.</p>
+<p>Can be None if dependency does not specify any version.
+Otherwise, will be one of GT (greater than), EQ (equal), LT (less than),
+GE (greater than or equal) or LE (less than or equal).</p>
 </dd></dl>
 
 </dd></dl>
@@ -1308,7 +1309,7 @@ NEVRAs returned by <a class="reference internal" href="#pubtools.pulplib.Modulem
       &copy;2019, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

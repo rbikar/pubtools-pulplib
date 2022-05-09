@@ -102,6 +102,12 @@ task queue.</p>
 <li><p><strong>task_throttle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Maximum number of queued or running tasks permitted for this client.
 If more than this number of tasks are running, the client will wait before triggering more.
 This can be used to ensure no single client overwhelms the Pulp server.</p></li>
+<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – <p>A hint for the number of threads the client should use in order to
+make concurrent requests to Pulp.</p>
+<p>This number should be considered as more of a scaling factor than
+a precise thread count. The client in practice will use more than
+this number of threads.</p>
+</p></li>
 <li><p><strong>auth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><em>object</em></a>) – <p>Any of these arguments, if provided, are used to initialize
 <a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Session" title="(in Requests v2.26.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Session</span></code></a> objects used by the client.</p>
 <p>These may be used, for example, to configure the credentials
@@ -140,6 +146,9 @@ for the Pulp server or to use an alternative CA bundle.</p>
 </ul>
 </dd>
 </dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.31.0: </span>Added the <code class="docutils literal notranslate"><span class="pre">threads</span></code> argument.</p>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="pubtools.pulplib.Client.get_repository">
 <span class="sig-name descname"><span class="pre">get_repository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.get_repository"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.Client.get_repository" title="Permalink to this definition">¶</a></dt>
@@ -205,7 +214,7 @@ If None, search for all units.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pubtools.pulplib.Client.copy_content">
-<span class="sig-name descname"><span class="pre">copy_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">from_repository</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_repository</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.copy_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.Client.copy_content" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">copy_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">from_repository</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_repository</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">CopyOptions(require_signed_rpms=None)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.copy_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.Client.copy_content" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copy content from one repository to another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -214,6 +223,11 @@ If None, search for all units.</p>
 <li><p><strong>to_repository</strong> (<a class="reference internal" href="pulpcore.html#pubtools.pulplib.Repository" title="pubtools.pulplib.Repository"><code class="xref py py-class docutils literal notranslate"><span class="pre">Repository</span></code></a>) – A repository to receive copied content.</p></li>
 <li><p><strong>criteria</strong> (<a class="reference internal" href="searching.html#pubtools.pulplib.Criteria" title="pubtools.pulplib.Criteria"><code class="xref py py-class docutils literal notranslate"><span class="pre">Criteria</span></code></a>) – A criteria object used to find units for copy.
 If None, all units in the source repo will be copied.</p></li>
+<li><p><strong>options</strong> (<a class="reference internal" href="#pubtools.pulplib.CopyOptions" title="pubtools.pulplib.CopyOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">CopyOptions</span></code></a>) – <p>Options influencing the copy.</p>
+<p>Some options may be specific to certain repository and content
+types. Options which are not applicable to this copy will be
+ignored.</p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -229,6 +243,9 @@ typically will have only a subset of available fields.</p>
 </dl>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.17.0.</span></p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.29.0: </span>Added the <code class="docutils literal notranslate"><span class="pre">options</span></code> argument.</p>
 </div>
 </dd></dl>
 
@@ -256,6 +273,32 @@ has been updated.</p>
 </dl>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.20.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pubtools.pulplib.Client.update_repository">
+<span class="sig-name descname"><span class="pre">update_repository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/client.html#Client.update_repository"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.Client.update_repository" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update mutable fields on an existing repository.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>repository</strong> (<a class="reference internal" href="pulpcore.html#pubtools.pulplib.Repository" title="pubtools.pulplib.Repository"><code class="xref py py-class docutils literal notranslate"><span class="pre">Repository</span></code></a>) – <p>A repository to be updated.</p>
+<p>Only those fields documented as <em>mutable</em> will have any effect during
+the update (e.g. <code class="docutils literal notranslate"><span class="pre">product_versions</span></code>). Other fields cannot be updated
+using this library.</p>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Future</dt><dd><p>A future which is resolved with a value of <code class="docutils literal notranslate"><span class="pre">None</span></code> once the
+repository has been updated.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.29.0.</span></p>
 </div>
 </dd></dl>
 
@@ -369,6 +412,23 @@ of common return values.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 1.4.0.</span></p>
 </div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pubtools.pulplib.CopyOptions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pubtools.pulplib.</span></span><span class="sig-name descname"><span class="pre">CopyOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">require_signed_rpms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pubtools/pulplib/_impl/client/copy.html#CopyOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pubtools.pulplib.CopyOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Options influencing a call to
+<a class="reference internal" href="#pubtools.pulplib.Client.copy_content" title="pubtools.pulplib.Client.copy_content"><code class="xref py py-meth docutils literal notranslate"><span class="pre">copy_content()</span></code></a>.</p>
+<p>Method generated by attrs for class CopyOptions.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pubtools.pulplib.CopyOptions.require_signed_rpms">
+<span class="sig-name descname"><span class="pre">require_signed_rpms</span></span><a class="headerlink" href="#pubtools.pulplib.CopyOptions.require_signed_rpms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to require signatures on all RPMs in the copy.</p>
+<p>In order to copy unsigned RPMs between repositories, it is generally
+necessary to set this flag to <code class="docutils literal notranslate"><span class="pre">False</span></code>. Unsigned RPMs may otherwise
+be silently omitted from the copy.</p>
 </dd></dl>
 
 </dd></dl>
@@ -492,7 +552,7 @@ and the object is not attached to any client, this exception is raised.</p>
       &copy;2019, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
